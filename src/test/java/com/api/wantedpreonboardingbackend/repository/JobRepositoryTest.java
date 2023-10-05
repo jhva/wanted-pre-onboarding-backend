@@ -67,7 +67,7 @@ public class JobRepositoryTest {
 
     @DisplayName("등록된 채용공고를 수정")
     @Test
-    public void SaveJobModify() {
+    public void saveJobModify() {
 
         JobPost oldPost = returnJobPostMethod();
 
@@ -82,6 +82,18 @@ public class JobRepositoryTest {
         Assertions.assertThat(oldPost.getJobCompensation()).isNotEqualTo(newUpdatePost.getJobCompensation());
         Assertions.assertThat(oldPost.getJobDescription()).isNotEqualTo(newUpdatePost.getJobDescription());
 
+    }
+
+    @DisplayName("등록된 채용공고를 삭제")
+    @Test
+    public void deleteJob() {
+        JobPost oldPost = returnJobPostMethod();
+
+        JobPost savePost = jobRepository.save(oldPost);
+
+        jobRepository.deleteById(savePost.getJobId());
+
+        Assertions.assertThat(jobRepository.findById(savePost.getJobId())).isEmpty();
     }
 
 }
