@@ -1,5 +1,6 @@
 package com.api.wantedpreonboardingbackend.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -19,8 +20,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Entity
-@Table(name="job")
+@Table(name = "job")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class JobPost extends BaseTimeEntity {
@@ -30,7 +32,6 @@ public class JobPost extends BaseTimeEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "job_id", columnDefinition = "BINARY(16)")
     private UUID jobId;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company")
@@ -48,7 +49,8 @@ public class JobPost extends BaseTimeEntity {
     private String jobDescription;
 
     @Builder
-    public JobPost (final UUID jobId,final Company company,final String jobPosition,final int jobCompensation,final String jobTech,final String jobDescription){
+    public JobPost(final UUID jobId, final Company company, final String jobPosition, final int jobCompensation, final String jobTech,
+        final String jobDescription) {
         this.jobId = jobId;
         this.company = company;
         this.jobPosition = jobPosition;
@@ -57,5 +59,12 @@ public class JobPost extends BaseTimeEntity {
         this.jobDescription = jobDescription;
     }
 
+    public void updateJobPost(final String jobPosition, final int jobCompensation, final String jobTech,
+        final String jobDescription) {
+        this.jobPosition = jobPosition;
+        this.jobCompensation = jobCompensation;
+        this.jobTech = jobTech;
+        this.jobDescription = jobDescription;
+    }
 
 }
