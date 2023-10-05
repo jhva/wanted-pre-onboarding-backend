@@ -1,5 +1,6 @@
 package com.api.wantedpreonboardingbackend.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.assertj.core.api.Assertions;
@@ -94,6 +95,20 @@ public class JobRepositoryTest {
         jobRepository.deleteById(savePost.getJobId());
 
         Assertions.assertThat(jobRepository.findById(savePost.getJobId())).isEmpty();
+    }
+
+    @DisplayName("채용공고 목록 조회")
+    @Test
+    public void findAllJob() {
+
+        for (int i = 0; i < 3; i++) {
+            JobPost jobPost = returnJobPostMethod();
+            jobRepository.save(jobPost);
+        }
+        List<JobPost> jobPostList = jobRepository.findAll();
+
+        Assertions.assertThat(jobPostList).isNotEmpty();
+        Assertions.assertThat(jobPostList.size()).isEqualTo(4);
     }
 
 }
