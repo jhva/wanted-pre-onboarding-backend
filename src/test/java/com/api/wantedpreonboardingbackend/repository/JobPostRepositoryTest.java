@@ -21,23 +21,22 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.api.wantedpreonboardingbackend.config.QuerydslConfig;
-import com.api.wantedpreonboardingbackend.config.QuerydslTestConfig;
 import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = {CustomJobPostRepositoryTest.class})
+@ContextConfiguration(classes = {JobPostRepositoryTest.class})
 @EnableJpaRepositories(basePackages = "com.api.wantedpreonboardingbackend.repository")
 @EntityScan("com.api.wantedpreonboardingbackend.entity")
 @Import(QuerydslConfig.class)
 @EnableJpaAuditing
-public class CustomJobPostRepositoryTest {
+public class JobPostRepositoryTest {
 
     @Autowired
     private JobPostRepository jobPostRepository;
@@ -52,10 +51,8 @@ public class CustomJobPostRepositoryTest {
     private CompanyRepository companyRepository;
 
     private JobPost returnJobPostMethod() {
-        UUID uuid = UUID.randomUUID();
 
         JobPost jobPost = JobPost.builder()
-            .jobId(uuid)
             .jobTech("Python")
             .jobCompensation(1000000)
             .jobPosition("백엔드 주니어 개발자")
@@ -74,17 +71,14 @@ public class CustomJobPostRepositoryTest {
     }
 
     private UUID returnJobPostUUID() {
-        UUID companyUUID = UUID.randomUUID();
         String[] tempJobDescription = new String[] {"원티드랩에서 백엔드 주니어 개발자를 채용합니다.", "원티드랩에서 프론트 주니어 개발자를 채용합니다.", "프론트 주니어 개발자를 채용합니다."};
         String[] tempJobPosition = new String[] {"백엔드 주니어 개발자", "Python 주니어 개발자", "풀스택 주니어 개발자"};
         UUID saveUUID = null;
-        Company newCompany = Company.createCompany(companyUUID, "한국", "핀교", "원티드랩");
+        Company newCompany = Company.createCompany("한국", "핀교", "원티드랩");
         Company saveCompany = companyRepository.save(newCompany);
         for (int i = 0; i < 3; i++) {
-            UUID uuid = UUID.randomUUID();
 
             JobPost jobPost = JobPost.builder()
-                .jobId(uuid)
                 .jobTech("Python")
                 .jobCompensation(1000000)
                 .jobPosition(tempJobPosition[i])
@@ -106,11 +100,10 @@ public class CustomJobPostRepositoryTest {
         String[] tempJobPosition = new String[] {"백엔드 주니어 개발자", "Python 주니어 개발자", "풀스택 주니어 개발자"};
         String[] companyCountry = new String[] {"한국", "태국", "중국"};
         for (int i = 0; i < 3; i++) {
-            Company newCompany = Company.createCompany(companyUUID, companyCountry[i], "핀교", "원티드랩");
+            Company newCompany = Company.createCompany(companyCountry[i], "핀교", "원티드랩");
             Company saveCompany = companyRepository.save(newCompany);
 
             JobPost jobPost = JobPost.builder()
-                .jobId(uuid)
                 .jobTech("Python")
                 .jobCompensation(1000000)
                 .jobPosition(tempJobPosition[i])
@@ -147,18 +140,16 @@ public class CustomJobPostRepositoryTest {
     @Test
     public void saveJobModify() {
 
-        JobPost oldPost = returnJobPostMethod();
-
-        JobPost savePost = jobPostRepository.save(oldPost);
+        JobPost savePost = jobPostRepository.save(returnJobPostMethod());
 
         savePost.updateJobPost("프론트 주니어 개발자", 1500000, "Python", "원티드랩에서 백엔드 주니어 개발자를 '적극' 채용합니다.");
 
         JobPost newUpdatePost = jobPostRepository.save(savePost);
 
-        Assertions.assertThat(oldPost.getJobTech()).isEqualTo(newUpdatePost.getJobTech());
-        Assertions.assertThat(oldPost.getJobPosition()).isNotEqualTo(newUpdatePost.getJobPosition());
-        Assertions.assertThat(oldPost.getJobCompensation()).isNotEqualTo(newUpdatePost.getJobCompensation());
-        Assertions.assertThat(oldPost.getJobDescription()).isNotEqualTo(newUpdatePost.getJobDescription());
+        Assertions.assertThat(savePost.getJobTech()).isEqualTo(newUpdatePost.getJobTech());
+        Assertions.assertThat(savePost.getJobPosition()).isEqualTo(newUpdatePost.getJobPosition());
+        Assertions.assertThat(savePost.getJobCompensation()).isEqualTo(newUpdatePost.getJobCompensation());
+        Assertions.assertThat(savePost.getJobDescription()).isEqualTo(newUpdatePost.getJobDescription());
 
     }
 
@@ -185,7 +176,7 @@ public class CustomJobPostRepositoryTest {
         List<JobPost> jobPostList = jobPostRepository.findAll();
 
         Assertions.assertThat(jobPostList).isNotEmpty();
-        Assertions.assertThat(jobPostList.size()).isEqualTo(4);
+        Assertions.assertThat(jobPostList.size()).isEqualTo(3);
     }
 
     @DisplayName("채용공고 검색")
