@@ -23,23 +23,17 @@ public class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-
-
     @DisplayName("회사 등록")
     @Test
-    public Company saveCompanyTest(){
+    public void saveCompanyTest() {
 
-        UUID uuid = UUID.randomUUID();
+        Company company = Company.createCompany("한국", "서울", "원티드랩");
 
-        Company company = Company.createCompany(uuid,"한국","판교");
-
-       Company newCompany= companyRepository.save(company);
+        Company newCompany = companyRepository.save(company);
 
         Assertions.assertThat(newCompany.getCompanyId()).isEqualTo(company.getCompanyId());
-        Assertions.assertThat(newCompany.getCompanyArea()).isEqualTo("판교");
+        Assertions.assertThat(newCompany.getCompanyArea()).isEqualTo("서울");
         Assertions.assertThat(newCompany.getCompanyCountry()).isEqualTo("한국");
-
-        return newCompany;
 
     }
 
