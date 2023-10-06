@@ -17,9 +17,8 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
 
     public void createCompany(CompanyDto.SaveRequest saveRequest) {
-        Company company = Company.createCompany(saveRequest.getCompanyCountry(), saveRequest.getCompanyArea(),
-            saveRequest.getCompanyName());
 
+        Company company = CompanyDto.toEntity(saveRequest);
         companyRepository.save(company);
 
     }

@@ -43,7 +43,7 @@ public class CompanyServiceTest {
         }
 
         @Test
-        @DisplayName("정상적으로 회사 등록에 성공")
+        @DisplayName("정상적으로 회사 등록 성공")
         void successCreateCompany() {
             //when
             companyService.createCompany(saveRequest);
