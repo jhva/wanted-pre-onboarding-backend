@@ -1,5 +1,8 @@
 package com.api.wantedpreonboardingbackend.repository;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +48,8 @@ public class CustomJobPostRepositoryTest {
     private static Company company;
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     private JobPost returnJobPostMethod() {
         UUID uuid = UUID.randomUUID();
@@ -61,13 +66,22 @@ public class CustomJobPostRepositoryTest {
 
     }
 
-    private void givenReturnMultipleJobPost() {
-        UUID uuid = UUID.randomUUID();
+    public UUID getJobPostUUID() {
+        UUID uuid = returnJobPostUUID();
+        JobPost findByJobPostId = jobPostRepository.findById(uuid).orElseThrow(() -> new IllegalArgumentException("found no job post"));
+        assertEquals(uuid, findByJobPostId.getJobId());
+        return findByJobPostId.getJobId();
+    }
+
+    private UUID returnJobPostUUID() {
         UUID companyUUID = UUID.randomUUID();
         String[] tempJobDescription = new String[] {"원티드랩에서 백엔드 주니어 개발자를 채용합니다.", "원티드랩에서 프론트 주니어 개발자를 채용합니다.", "프론트 주니어 개발자를 채용합니다."};
         String[] tempJobPosition = new String[] {"백엔드 주니어 개발자", "Python 주니어 개발자", "풀스택 주니어 개발자"};
-        String[] companyCountry = new String[] {"한국", "태국", "중국"};
+        UUID saveUUID = null;
+        Company newCompany = Company.createCompany(companyUUID, "한국", "핀교", "원티드랩");
+        Company saveCompany = companyRepository.save(newCompany);
         for (int i = 0; i < 3; i++) {
+            UUID uuid = UUID.randomUUID();
 
             JobPost jobPost = JobPost.builder()
                 .jobId(uuid)
@@ -75,6 +89,33 @@ public class CustomJobPostRepositoryTest {
                 .jobCompensation(1000000)
                 .jobPosition(tempJobPosition[i])
                 .jobDescription(tempJobDescription[i])
+                .company(saveCompany)
+                .build();
+            JobPost jobpost = jobPostRepository.save(jobPost);
+
+            saveUUID = jobpost.getJobId();
+        }
+
+        return saveUUID;
+    }
+
+    private void givenReturnMultipleJobPost() {
+        UUID uuid = UUID.randomUUID();
+        UUID companyUUID = UUID.randomUUID();
+        String[] tempJobDescription = new String[] {"원티드랩에서 백엔드 주니어 개발자를 채용합니다.", "원티드랩에서 프론트 주니어 개발자를 채용합니다.", "프론트 주니어 개발자를 채용합니다."};
+        String[] tempJobPosition = new String[] {"백엔드 주니어 개발자", "Python 주니어 개발자", "풀스택 주니어 개발자"};
+        String[] companyCountry = new String[] {"한국", "태국", "중국"};
+        for (int i = 0; i < 3; i++) {
+            Company newCompany = Company.createCompany(companyUUID, companyCountry[i], "핀교", "원티드랩");
+            Company saveCompany = companyRepository.save(newCompany);
+
+            JobPost jobPost = JobPost.builder()
+                .jobId(uuid)
+                .jobTech("Python")
+                .jobCompensation(1000000)
+                .jobPosition(tempJobPosition[i])
+                .jobDescription(tempJobDescription[i])
+                .company(saveCompany)
                 .build();
             jobPostRepository.save(jobPost);
         }
@@ -171,6 +212,32 @@ public class CustomJobPostRepositoryTest {
         //then
         Assertions.assertThat(jobPost.size()).isEqualTo(1);
 
+    }
+
+    @DisplayName("채용회사 id를 통해 상세 페이지를 조회")
+    @Test
+    public void getDetailJob() {
+        UUID uuid = getJobPostUUID();
+
+        List<JobPost> jobPosts = jpaQueryFactory
+            .select(QJobPost.jobPost)
+            .from(QJobPost.jobPost)
+            .leftJoin(QJobPost.jobPost.companyId, QCompany.company)
+            .where(QJobPost.jobPost.jobId.eq(uuid))
+            .fetchJoin()
+            .fetch();
+        //when
+        List<UUID> otherCompanyJobs = new ArrayList<>();
+        for (JobPost jobPost : jobPosts) {
+            otherCompanyJobs = jpaQueryFactory.select(QJobPost.jobPost.jobId)
+                .from(QJobPost.jobPost)
+                .where(QJobPost.jobPost.companyId.eq(jobPost.getCompanyId()))
+                .fetch();
+        }
+
+        //then
+        Assertions.assertThat(jobPosts.size()).isEqualTo(1);
+        Assertions.assertThat(otherCompanyJobs.size()).isEqualTo(3);
     }
 
 }
