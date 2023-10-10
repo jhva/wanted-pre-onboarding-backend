@@ -51,8 +51,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class JobServiceTest {
 
     @Mock
-    private CompanyRepository companyRepository;
-    @Mock
     private JobPostRepository jobPostRepository;
 
     @Mock
@@ -64,7 +62,7 @@ public class JobServiceTest {
 
     @BeforeEach
     void setUp() {
-        jobService = new JobService(jobPostRepository, customJobPostRepository);
+        jobService = new JobService(jobPostRepository);
 
     }
 
@@ -333,7 +331,7 @@ public class JobServiceTest {
             @Test
             void searchJobSuccess() {
                 String searchKeyword = "Python";
-                JobService jobService = new JobService(jobPostRepository, customJobPostRepository);
+                JobService jobService = new JobService(jobPostRepository);
 
                 // 목 객체의 동작을 정의
                 JobPost jobPost = createJobPost("Python", 1000000, "백엔드 주니어 개발자");
@@ -356,7 +354,7 @@ public class JobServiceTest {
             void searchNotFound() {
                 // 검색 결과가 없을 때 검색을 수행합니다.
                 String searchKeyword = "Python";
-                JobService jobService = new JobService(jobPostRepository, customJobPostRepository);
+                JobService jobService = new JobService(jobPostRepository);
 
                 // 목 객체의 동작을 정의
                 JobPost jobPost = createJobPost("Java", 1000000, "백엔드 주니어 개발자");

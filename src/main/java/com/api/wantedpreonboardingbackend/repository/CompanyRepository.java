@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 import com.api.wantedpreonboardingbackend.entity.Company;
 
-public interface CompanyRepository extends JpaRepository<Company, UUID>, CustomJobPostRepository {
+public interface CompanyRepository extends JpaRepository<Company, UUID> {
 }

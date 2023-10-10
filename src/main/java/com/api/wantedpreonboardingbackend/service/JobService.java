@@ -13,6 +13,7 @@ import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
+import com.api.wantedpreonboardingbackend.exception.job.JobNotExist;
 import com.api.wantedpreonboardingbackend.repository.CustomJobPostRepository;
 import com.api.wantedpreonboardingbackend.repository.CustomJobPostRepositoryImpl;
 import com.api.wantedpreonboardingbackend.repository.JobPostRepository;
@@ -28,7 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JobService {
     private final JobPostRepository jobPostRepository;
-    private final CustomJobPostRepository customJobPostRepository;
+
+    private JobPost getJobPost(UUID id) {
+
+        return jobPostRepository.findById(id).orElseThrow(JobNotExist::new);
+    }
 
     public JobPostDto.SaveResponseJobDto jobPostCreate(JobPostDto.SaveRequest saveRequest) {
         if (saveRequest == null) {
@@ -43,9 +48,7 @@ public class JobService {
     }
 
     public JobPost jobPostUpdate(UUID jobPostId, JobPostDto.SaveRequest updateDto) {
-        JobPost getJobPost = jobPostRepository.findById(jobPostId).orElseThrow(() -> new NoSuchElementException(
-            String.format("not found jobPost %s", jobPostId)
-        ));
+        JobPost getJobPost = getJobPost(jobPostId);
 
         getJobPost.updateJobPost(updateDto.getJobPosition(), updateDto.getJobCompensation(), updateDto.getJobTech(),
             updateDto.getJobDescription());
@@ -54,10 +57,8 @@ public class JobService {
     }
 
     public void deleteJobPost(UUID jobId) {
-        JobPost getJobPost = jobPostRepository.findById(jobId).orElseThrow(() -> new NoSuchElementException(
-            String.format("not found jobPost %s", jobId)
-        ));
-        jobPostRepository.deleteById(getJobPost.getJobId());
+        JobPost jobpost = getJobPost(jobId);
+        jobPostRepository.deleteById(jobpost.getJobId());
     }
 
     public List<JobPostDto.JobAllPost> findAllJobPosts() {
@@ -103,10 +104,7 @@ public class JobService {
     }
 
     public JobPostDto.JobDetailPost detailFindJobPost(final UUID searchUUID) {
-        JobPost getJobPost = jobPostRepository.findById(searchUUID).orElseThrow(() -> new NoSuchElementException(
-            String.format("not found jobPost %s", searchUUID)
-        ));
-
+        JobPost getJobPost = getJobPost(searchUUID);
         return jobPostRepository.findByDetailJob(getJobPost.getJobId());
 
     }

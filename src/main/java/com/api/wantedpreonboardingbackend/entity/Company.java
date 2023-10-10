@@ -34,7 +34,7 @@ public class Company extends BaseTimeEntity {
         name = "UUID",
         strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "comapny_id", updatable = false, nullable = false)
+    @Column(name = "company_id", updatable = false, nullable = false)
     private UUID companyId;
 
     @Column(name = "company_name")
