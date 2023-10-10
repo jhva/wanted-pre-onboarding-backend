@@ -29,13 +29,17 @@ import lombok.NoArgsConstructor;
 public class JobPost extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "job_id")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "job_id", updatable = false, nullable = false)
     private UUID jobId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company")
-    private Company company;
+    private Company companyId;
     @Column(name = "job_position")
     private String jobPosition;
 
@@ -52,7 +56,7 @@ public class JobPost extends BaseTimeEntity {
     public JobPost(final UUID jobId, final Company company, final String jobPosition, final int jobCompensation, final String jobTech,
         final String jobDescription) {
         this.jobId = jobId;
-        this.company = company;
+        this.companyId = company;
         this.jobPosition = jobPosition;
         this.jobCompensation = jobCompensation;
         this.jobTech = jobTech;
