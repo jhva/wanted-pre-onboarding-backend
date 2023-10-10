@@ -20,9 +20,6 @@ import org.assertj.core.api.Assertions;
 public class CompanyServiceTest {
 
     @Mock
-    private CompanyService companyService;
-
-    @Mock
     private CompanyRepository companyRepository;
 
     @Nested
@@ -45,15 +42,18 @@ public class CompanyServiceTest {
         @Test
         @DisplayName("정상적으로 회사 등록 성공")
         void successCreateCompany() {
-            //when
-            companyService.createCompany(saveRequest);
-            companyRepository.save(company);
 
-            //then
-            verify(companyService, times(1)).createCompany(saveRequest);
-            Assertions.assertThat(company.getCompanyName()).isEqualTo("원티드랩");
-            Assertions.assertThat(company.getCompanyArea()).isEqualTo("판교");
-            Assertions.assertThat(company.getCompanyCountry()).isEqualTo("한국");
+            // When
+            when(companyRepository.save(any(Company.class))).thenReturn(company);
+            CompanyService companyService = new CompanyService(companyRepository); //
+
+            Company savedCompany = companyService.createCompany(saveRequest);
+
+            // Then
+            verify(companyRepository, times(1)).save(any(Company.class));
+            Assertions.assertThat(savedCompany.getCompanyName()).isEqualTo("원티드랩");
+            Assertions.assertThat(savedCompany.getCompanyArea()).isEqualTo("판교");
+            Assertions.assertThat(savedCompany.getCompanyCountry()).isEqualTo("한국");
         }
 
     }

@@ -16,10 +16,10 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public void createCompany(CompanyDto.SaveRequest saveRequest) {
+    public Company createCompany(CompanyDto.SaveRequest saveRequest) {
 
         Company company = CompanyDto.toEntity(saveRequest);
-        companyRepository.save(company);
+        return companyRepository.save(company);
 
     }
 }
