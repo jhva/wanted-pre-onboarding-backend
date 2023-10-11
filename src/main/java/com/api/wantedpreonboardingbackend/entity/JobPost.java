@@ -29,11 +29,8 @@ import lombok.NoArgsConstructor;
 public class JobPost extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "job_id", updatable = false, nullable = false)
     private UUID jobId;
 

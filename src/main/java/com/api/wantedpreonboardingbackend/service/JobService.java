@@ -14,12 +14,14 @@ import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
 import com.api.wantedpreonboardingbackend.exception.job.JobNotExist;
+import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
 import com.api.wantedpreonboardingbackend.repository.CustomJobPostRepository;
 import com.api.wantedpreonboardingbackend.repository.CustomJobPostRepositoryImpl;
 import com.api.wantedpreonboardingbackend.repository.JobPostRepository;
 import com.api.wantedpreonboardingbackend.service.dto.JobPostDto;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 public class JobService {
     private final JobPostRepository jobPostRepository;
 
+    private final CompanyRepository companyRepository;
+
+    private Company getCompany(UUID id) {
+
+        return companyRepository.findById(id).orElseThrow(JobNotExist::new);
+    }
+
     private JobPost getJobPost(UUID id) {
 
         return jobPostRepository.findById(id).orElseThrow(JobNotExist::new);
@@ -39,8 +48,9 @@ public class JobService {
         if (saveRequest == null) {
             throw new NoSuchElementException("saveRequest cannot be null");
         }
+        Company company = getCompany(saveRequest.getCompany());
 
-        JobPost newJobPost = JobPostDto.toEntity(saveRequest);
+        JobPost newJobPost = JobPostDto.toEntity(saveRequest, company);
 
         JobPost savePost = jobPostRepository.save(newJobPost);
 

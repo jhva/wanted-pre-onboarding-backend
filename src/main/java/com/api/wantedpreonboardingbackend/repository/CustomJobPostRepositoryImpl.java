@@ -63,6 +63,7 @@ public class CustomJobPostRepositoryImpl implements CustomJobPostRepository {
             .fetch();
 
         return JobPostDto.JobDetailPost.builder()
+            .id(mainJobPost.getJobId())
             .jobCompensation(mainJobPost.getJobCompensation())
             .jobDescription(mainJobPost.getJobDescription())
             .jobPosition(mainJobPost.getJobPosition())

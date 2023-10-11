@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class JobPostDto {
 
@@ -23,7 +24,7 @@ public class JobPostDto {
         private String jobPosition;
         private String jobDescription;
         private int jobCompensation;
-        private Company company;
+        private UUID company;
 
     }
 
@@ -52,7 +53,7 @@ public class JobPostDto {
         private String jobPosition;
         private String jobDescription;
         private int jobCompensation;
-        private Company company;
+        private UUID company_id;
 
     }
 
@@ -74,12 +75,12 @@ public class JobPostDto {
 
     }
 
-    public static JobPost toEntity(SaveRequest saveRequest) {
+    public static JobPost toEntity(SaveRequest saveRequest, Company company) {
         return JobPost.builder()
             .jobTech(saveRequest.getJobTech())
             .jobDescription(saveRequest.getJobDescription())
             .jobPosition(saveRequest.getJobPosition())
-            .company(saveRequest.getCompany())
+            .company(company)
             .jobCompensation(saveRequest.getJobCompensation()).build();
 
     }
@@ -90,7 +91,7 @@ public class JobPostDto {
             .jobTech(jobPost.getJobTech())
             .jobDescription(jobPost.getJobDescription())
             .jobPosition(jobPost.getJobPosition())
-            .company(jobPost.getCompanyId())
+            .company_id(jobPost.getCompanyId().getCompanyId())
             .jobCompensation(jobPost.getJobCompensation()).build();
 
     }

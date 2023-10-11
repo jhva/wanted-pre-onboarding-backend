@@ -54,7 +54,7 @@ public class JobServiceTest {
     private JobPostRepository jobPostRepository;
 
     @Mock
-    private CustomJobPostRepository customJobPostRepository;
+    private CompanyRepository companyRepository;
 
     @InjectMocks
     private JobService jobService;
@@ -62,7 +62,7 @@ public class JobServiceTest {
 
     @BeforeEach
     void setUp() {
-        jobService = new JobService(jobPostRepository);
+        jobService = new JobService(jobPostRepository, companyRepository);
 
     }
 
@@ -75,6 +75,7 @@ public class JobServiceTest {
         @BeforeEach
         void setUp() {
             company = Company.builder()
+                .companyId(UUID.randomUUID())
                 .companyCountry("한국")
                 .companyName("원티드랩")
                 .companyArea("강남").build();
@@ -83,10 +84,10 @@ public class JobServiceTest {
                 .jobTech("Python")
                 .jobCompensation(1000000)
                 .jobPosition("백엔드 주니어 개발자")
-                .company(company)
+                .company(company.getCompanyId())
                 .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
                 .build();
-            jobPost = JobPostDto.toEntity(saveRequest);
+            jobPost = JobPostDto.toEntity(saveRequest, company);
         }
 
         @Nested
@@ -103,9 +104,6 @@ public class JobServiceTest {
 
                 //then
                 verify(jobPostRepository, times(1)).save(any(JobPost.class));
-                Assertions.assertThat(saveJob.getCompany().getCompanyName()).isEqualTo("원티드랩");
-                Assertions.assertThat(saveJob.getCompany().getCompanyArea()).isEqualTo("강남");
-                Assertions.assertThat(saveJob.getCompany().getCompanyCountry()).isEqualTo("한국");
                 Assertions.assertThat(saveJob.getJobDescription()).isEqualTo("원티드랩에서 백엔드 주니어 개발자를 채용합니다.");
                 Assertions.assertThat(saveJob.getJobCompensation()).isEqualTo(1000000);
                 Assertions.assertThat(saveJob.getJobTech()).isEqualTo("Python");
@@ -217,7 +215,7 @@ public class JobServiceTest {
                 .jobTech("Python")
                 .jobCompensation(1000000)
                 .jobPosition("백엔드 주니어 개발자")
-                .company(company)
+                .company(company.getCompanyId())
                 .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
                 .build();
             jobPost = JobPost.builder()
@@ -313,6 +311,7 @@ public class JobServiceTest {
             @BeforeEach
             void setUp() {
                 company = Company.builder()
+                    .companyId(UUID.randomUUID())
                     .companyCountry("한국")
                     .companyName("원티드랩")
                     .companyArea("강남").build();
@@ -321,17 +320,17 @@ public class JobServiceTest {
                     .jobTech("Python")
                     .jobCompensation(1000000)
                     .jobPosition("백엔드 주니어 개발자")
-                    .company(company)
+                    .company(company.getCompanyId())
                     .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
                     .build();
-                jobPost = JobPostDto.toEntity(saveRequest);
+                jobPost = JobPostDto.toEntity(saveRequest, company);
             }
 
             @DisplayName("Python 채용공고 검색 성공")
             @Test
             void searchJobSuccess() {
                 String searchKeyword = "Python";
-                JobService jobService = new JobService(jobPostRepository);
+                JobService jobService = new JobService(jobPostRepository, companyRepository);
 
                 // 목 객체의 동작을 정의
                 JobPost jobPost = createJobPost("Python", 1000000, "백엔드 주니어 개발자");
@@ -354,7 +353,7 @@ public class JobServiceTest {
             void searchNotFound() {
                 // 검색 결과가 없을 때 검색을 수행합니다.
                 String searchKeyword = "Python";
-                JobService jobService = new JobService(jobPostRepository);
+                JobService jobService = new JobService(jobPostRepository, companyRepository);
 
                 // 목 객체의 동작을 정의
                 JobPost jobPost = createJobPost("Java", 1000000, "백엔드 주니어 개발자");

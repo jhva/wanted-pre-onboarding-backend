@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.api.wantedpreonboardingbackend.common.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,11 +30,8 @@ import lombok.NoArgsConstructor;
 public class Company extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "company_id", updatable = false, nullable = false)
     private UUID companyId;
 
@@ -46,7 +44,7 @@ public class Company extends BaseTimeEntity {
     @Column(name = "company_area")
     private String companyArea;
 
-    @OneToMany(mappedBy = "companyId")
+    @OneToMany(mappedBy = "companyId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobPost> jobPosts = new ArrayList<>();
 
     @Builder
