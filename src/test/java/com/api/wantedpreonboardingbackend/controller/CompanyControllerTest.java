@@ -1,17 +1,22 @@
 package com.api.wantedpreonboardingbackend.controller;
 
+import static org.mockito.BDDMockito.*;
 import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.service.CompanyService;
@@ -44,23 +49,20 @@ public class CompanyControllerTest {
     @BeforeEach
     void setUp() {
         saveRequestDto = CompanyDto.SaveRequest.builder()
-            .companyArea("판교")
+            .companyArea("강남")
             .companyName("원티드랩")
+
             .companyCountry("한국").build();
     }
 
     @Test
     @DisplayName("회사 등록 컨트롤러 테스트")
     void createCompany() throws Exception {
-        //given
-        company = companyService.createCompany(saveRequestDto);
-
-        //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post(API_V1_POST + "/create-company")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(company)));
+            .content(objectMapper.writeValueAsString(saveRequestDto)));
 
-        //then
         resultActions.andExpect(status().isOk()).andDo(print());
+
     }
 }

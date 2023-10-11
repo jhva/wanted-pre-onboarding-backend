@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.api.wantedpreonboardingbackend.entity.Company;
 
+@Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
 }

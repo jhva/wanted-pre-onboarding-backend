@@ -6,10 +6,13 @@ import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
 import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 @Slf4j
 public class CompanyService {

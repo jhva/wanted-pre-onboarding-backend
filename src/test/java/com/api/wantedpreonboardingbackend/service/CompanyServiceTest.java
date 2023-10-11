@@ -15,6 +15,7 @@ import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
 import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
 
 import org.assertj.core.api.Assertions;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @ExtendWith(MockitoExtension.class)
 public class CompanyServiceTest {
@@ -35,8 +36,7 @@ public class CompanyServiceTest {
                 .companyName("원티드랩")
                 .companyArea("판교").build();
 
-            company = Company.createCompany(saveRequest.getCompanyCountry(), saveRequest.getCompanyArea(), saveRequest.getCompanyName())
-            ;
+            company = Company.createCompany(saveRequest.getCompanyCountry(), saveRequest.getCompanyArea(), saveRequest.getCompanyName());
         }
 
         @Test
