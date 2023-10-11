@@ -75,20 +75,4 @@ public class CustomJobPostRepositoryImpl implements CustomJobPostRepository {
             .build();
     }
 
-    public BooleanBuilder searchQueryBuilder(String jobSearchQuery) {
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (jobSearchQuery != null && !jobSearchQuery.isEmpty()) {
-            builder.or(qJobPost.jobDescription.contains(jobSearchQuery));
-            builder.or(qJobPost.jobTech.contains(jobSearchQuery));
-            builder.or(qJobPost.jobPosition.contains(jobSearchQuery));
-            builder.or(qJobPost.companyId.companyName.contains(jobSearchQuery));
-            builder.or(qJobPost.companyId.companyArea.contains(jobSearchQuery));
-            builder.or(qJobPost.companyId.companyCountry.contains(jobSearchQuery));
-        }
-
-        return builder;
-
-    }
-
 }
