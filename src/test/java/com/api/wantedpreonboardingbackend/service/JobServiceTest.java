@@ -75,19 +75,10 @@ public class JobServiceTest {
         @BeforeEach
         void setUp() {
             company = Company.builder()
-                .companyId(UUID.randomUUID())
                 .companyCountry("한국")
                 .companyName("원티드랩")
                 .companyArea("강남").build();
 
-            saveRequest = JobPostDto.SaveRequest.builder()
-                .jobTech("Python")
-                .jobCompensation(1000000)
-                .jobPosition("백엔드 주니어 개발자")
-                .company(company.getCompanyId())
-                .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
-                .build();
-            jobPost = JobPostDto.toEntity(saveRequest, company);
         }
 
         @Nested
@@ -96,18 +87,26 @@ public class JobServiceTest {
             @Test
             @DisplayName("채용공고 등록 성공")
             void CreateJobPostSuccess() {
+                Company originCompany = Company.builder()
+                    .companyId(UUID.randomUUID())
+                    .companyCountry("한국")
+                    .companyName("원티드랩")
+                    .companyArea("강남").build();
 
-                //when
-                when(jobPostRepository.save(any(JobPost.class))).thenReturn(jobPost);
-
-                JobPostDto.SaveResponseJobDto saveJob = jobService.jobPostCreate(saveRequest);
-
+                JobPost jobpost1 = JobPost.builder()
+                    .company(originCompany)
+                    .jobTech("Python")
+                    .jobPosition("백엔드 주니어 개발자")
+                    .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
+                    .jobCompensation(1000000)
+                    .build();
+                when(jobPostRepository.save(jobpost1)).thenReturn(jobpost1);
                 //then
-                verify(jobPostRepository, times(1)).save(any(JobPost.class));
-                Assertions.assertThat(saveJob.getJobDescription()).isEqualTo("원티드랩에서 백엔드 주니어 개발자를 채용합니다.");
-                Assertions.assertThat(saveJob.getJobCompensation()).isEqualTo(1000000);
-                Assertions.assertThat(saveJob.getJobTech()).isEqualTo("Python");
-                Assertions.assertThat(saveJob.getJobPosition()).isEqualTo("백엔드 주니어 개발자");
+                JobPost save = jobPostRepository.save(jobpost1);
+                Assertions.assertThat(save.getJobDescription()).isEqualTo("원티드랩에서 백엔드 주니어 개발자를 채용합니다.");
+                Assertions.assertThat(save.getJobCompensation()).isEqualTo(1000000);
+                Assertions.assertThat(save.getJobTech()).isEqualTo("Python");
+                Assertions.assertThat(save.getJobPosition()).isEqualTo("백엔드 주니어 개발자");
 
             }
 
@@ -211,16 +210,6 @@ public class JobServiceTest {
         @BeforeEach
         void setUp() {
 
-            saveRequest = JobPostDto.SaveRequest.builder()
-                .jobTech("Python")
-                .jobCompensation(1000000)
-                .jobPosition("백엔드 주니어 개발자")
-                .company(company.getCompanyId())
-                .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
-                .build();
-            jobPost = JobPost.builder()
-                .jobId(uuid)
-                .build();
         }
 
         @Nested
@@ -232,19 +221,26 @@ public class JobServiceTest {
             void deleteJobSuccess() {
 
                 // 생성된 JobPost 객체
+                Company originCompany = Company.builder()
+                    .companyId(UUID.randomUUID())
+                    .companyCountry("한국")
+                    .companyName("원티드랩")
+                    .companyArea("강남").build();
 
-                // jobPostRepository.findById 메서드에 대한 Mock 설정
-                when(jobPostRepository.save(any(JobPost.class))).thenReturn(jobPost);
-                when(jobPostRepository.findById(jobPost.getJobId())).thenReturn(Optional.of(jobPost));
+                JobPost jobpost1 = JobPost.builder()
+                    .jobId(UUID.randomUUID())
+                    .company(originCompany)
+                    .jobTech("Python")
+                    .jobPosition("백엔드 주니어 개발자")
+                    .jobDescription("원티드랩에서 백엔드 주니어 개발자를 채용합니다.")
+                    .jobCompensation(1000000)
+                    .build();
 
-                // When: 채용공고 생성
-                JobPostDto.SaveResponseJobDto jobPost1 = jobService.jobPostCreate(saveRequest);
+                when(jobPostRepository.findById(jobpost1.getJobId())).thenReturn(Optional.of(jobpost1));
+                jobService.deleteJobPost(jobpost1.getJobId());
 
-                // When: 채용공고 삭제
-                jobService.deleteJobPost(jobPost.getJobId());
-                verify(jobPostRepository, times(1)).deleteById(jobPost.getJobId());
+                verify(jobPostRepository, times(1)).deleteById(jobpost1.getJobId());
 
-                // Then: 해당 ID의 JobPost가 삭제되었는지 확인
             }
 
         }

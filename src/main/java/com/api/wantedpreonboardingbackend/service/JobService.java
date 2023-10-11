@@ -13,6 +13,7 @@ import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
+import com.api.wantedpreonboardingbackend.exception.company.CompanyNotExist;
 import com.api.wantedpreonboardingbackend.exception.job.JobNotExist;
 import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
 import com.api.wantedpreonboardingbackend.repository.CustomJobPostRepository;
@@ -36,7 +37,7 @@ public class JobService {
 
     private Company getCompany(UUID id) {
 
-        return companyRepository.findById(id).orElseThrow(JobNotExist::new);
+        return companyRepository.findById(id).orElseThrow(CompanyNotExist::new);
     }
 
     private JobPost getJobPost(UUID id) {
