@@ -31,20 +31,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CompanyControllerTest {
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private MockMvc mockMvc;
 
     private CompanyDto.SaveRequest saveRequestDto;
 
-    private Company company;
-
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String API_V1_POST = "/api/v1/company";
+    private static final String API_V1_POST = "/api/v1";
 
     @BeforeEach
     void setUp() {

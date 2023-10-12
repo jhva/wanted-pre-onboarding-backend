@@ -49,7 +49,7 @@ public class JobPostControllerTest {
     private static final UUID id = UUID.fromString("75e486bc-6bd1-46b5-b738-19fb288911ac");
     private static final UUID jobId = UUID.fromString("0fc291ab-a591-47e4-b7db-0c8f27d1f411");
 
-    private static final String API_V1_POST = "/api/v1/job";
+    private static final String API_V1_POST = "/api/v1";
 
     @BeforeEach
     void setUp() {

@@ -20,7 +20,7 @@ import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/company")
+@RequestMapping("/api/v1")
 @RestController
 public class CompanyController {
 
