@@ -32,12 +32,12 @@ public class CustomJobPostRepositoryImpl implements CustomJobPostRepository {
         List<JobPost> jobPost = queryFactory.selectFrom(qJobPost) // 수정: 대문자 시작
             .leftJoin(qJobPost.companyId, qCompany) // 수정: 대문자 시작
             .where(
-                qJobPost.jobTech.eq(jobSearchQuery)
-                    .or(qJobPost.jobDescription.eq(jobSearchQuery))
-                    .or(qJobPost.jobPosition.eq(jobSearchQuery))
-                    .or(qJobPost.companyId.companyName.eq(jobSearchQuery))
-                    .or(qJobPost.companyId.companyArea.eq(jobSearchQuery))
-                    .or(qJobPost.companyId.companyCountry.eq(jobSearchQuery))
+                qJobPost.jobTech.contains(jobSearchQuery)
+                    .or(qJobPost.jobDescription.contains(jobSearchQuery))
+                    .or(qJobPost.jobPosition.contains(jobSearchQuery))
+                    .or(qJobPost.companyId.companyName.contains(jobSearchQuery))
+                    .or(qJobPost.companyId.companyArea.contains(jobSearchQuery))
+                    .or(qJobPost.companyId.companyCountry.contains(jobSearchQuery))
             )
             .fetch();
         return jobPost;

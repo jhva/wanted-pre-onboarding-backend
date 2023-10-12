@@ -20,6 +20,7 @@ import com.api.wantedpreonboardingbackend.service.JobService;
 import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
 import com.api.wantedpreonboardingbackend.service.dto.JobPostDto;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class JobController {
      * @return ApiResponse
      */
     @PostMapping(path = "/create-job")
-    public ApiResponse<Object> createJob(@RequestBody final JobPostDto.SaveRequest saveRequestDto) {
+    public ApiResponse<Object> createJob(@RequestBody @Valid final JobPostDto.SaveRequest saveRequestDto) {
         jobService.jobPostCreate(saveRequestDto);
         return ApiResponse.<Object>builder()
             .statusCode(HttpStatus.CREATED.value())

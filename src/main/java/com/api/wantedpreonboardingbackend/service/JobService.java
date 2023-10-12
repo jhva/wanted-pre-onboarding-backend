@@ -13,6 +13,7 @@ import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
+import com.api.wantedpreonboardingbackend.exception.CommonBusinessException;
 import com.api.wantedpreonboardingbackend.exception.company.CompanyNotExist;
 import com.api.wantedpreonboardingbackend.exception.job.JobNotExist;
 import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
@@ -45,10 +46,8 @@ public class JobService {
         return jobPostRepository.findById(id).orElseThrow(JobNotExist::new);
     }
 
-    public JobPostDto.SaveResponseJobDto jobPostCreate(JobPostDto.SaveRequest saveRequest) {
-        if (saveRequest == null) {
-            throw new NoSuchElementException("saveRequest cannot be null");
-        }
+    public JobPostDto.SaveResponseJobDto jobPostCreate(JobPostDto.SaveRequest saveRequest) throws CommonBusinessException {
+
         Company company = getCompany(saveRequest.getCompany());
 
         JobPost newJobPost = JobPostDto.toEntity(saveRequest, company);

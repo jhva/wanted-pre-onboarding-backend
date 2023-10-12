@@ -7,6 +7,8 @@ import java.util.UUID;
 import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +22,17 @@ public class JobPostDto {
     @Builder
     public static class SaveRequest {
 
+        @NotBlank(message = "사용 기술을 입력해주세요.")
         private String jobTech;
+        @NotBlank(message = "채용 포지션을 입력해주세요.")
         private String jobPosition;
+        @NotBlank(message = "채용 내용을 입력해주세요.")
         private String jobDescription;
+
+        @NotNull(message = "채용 보상금을 입력해주세요.")
         private int jobCompensation;
+
+        @NotNull
         private UUID company;
 
     }
