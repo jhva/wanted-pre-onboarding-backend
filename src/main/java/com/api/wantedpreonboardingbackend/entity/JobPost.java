@@ -53,9 +53,6 @@ public class JobPost extends BaseTimeEntity {
     @Column(name = "job_description")
     private String jobDescription;
 
-    @OneToMany(mappedBy = "applyId")
-    private List<ApplyHistory> applyHistory = new ArrayList<>();
-
     @Builder
     public JobPost(final UUID jobId, final Company company, final String jobPosition, final int jobCompensation, final String jobTech,
         final String jobDescription) {
