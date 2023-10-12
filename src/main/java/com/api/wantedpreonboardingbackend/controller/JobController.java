@@ -29,12 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class JobController {
     private final JobService jobService;
 
-    /**
-     * 게시글을 생성
-     *
-     * @param saveRequestDto 생성할 게시글 정보
-     * @return ApiResponse
-     */
     @PostMapping(path = "/create-job")
     public ApiResponse<Object> createJob(@RequestBody @Valid final JobPostDto.SaveRequest saveRequestDto) {
         jobService.jobPostCreate(saveRequestDto);

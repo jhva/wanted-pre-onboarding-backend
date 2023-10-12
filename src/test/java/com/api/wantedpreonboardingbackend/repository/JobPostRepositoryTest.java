@@ -21,10 +21,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.api.wantedpreonboardingbackend.config.QuerydslConfig;
+import com.api.wantedpreonboardingbackend.entity.ApplyHistory;
 import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.QCompany;
 import com.api.wantedpreonboardingbackend.entity.QJobPost;
+import com.api.wantedpreonboardingbackend.entity.User;
+import com.api.wantedpreonboardingbackend.service.dto.UserDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.transaction.Transactional;

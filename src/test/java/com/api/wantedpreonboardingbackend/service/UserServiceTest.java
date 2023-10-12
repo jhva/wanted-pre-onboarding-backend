@@ -18,11 +18,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.api.wantedpreonboardingbackend.config.QuerydslTestConfig;
 import com.api.wantedpreonboardingbackend.entity.Company;
+import com.api.wantedpreonboardingbackend.entity.JobPost;
 import com.api.wantedpreonboardingbackend.entity.User;
 import com.api.wantedpreonboardingbackend.repository.CompanyRepository;
 import com.api.wantedpreonboardingbackend.repository.JobPostRepository;
 import com.api.wantedpreonboardingbackend.repository.UserRepository;
 import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
+import com.api.wantedpreonboardingbackend.service.dto.JobPostDto;
 import com.api.wantedpreonboardingbackend.service.dto.UserDto;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,5 +60,20 @@ public class UserServiceTest {
             Assertions.assertThat(saveUser.getUserName()).isEqualTo(saveRequest.getUserName());
         }
 
+        @Test
+        @DisplayName("사용자가 채용 공고에 지원 성공")
+        void dd() {
+
+            User user = UserDto.toEntity(saveRequest);
+            // When
+            when(userRepository.save(any(User.class))).thenReturn(user);
+            UserService userService = new UserService(userRepository); //
+
+            User saveUser = userService.createUser(saveRequest);
+
+            Assertions.assertThat(saveUser.getUserName()).isEqualTo(saveRequest.getUserName());
+        }
+
     }
+
 }
