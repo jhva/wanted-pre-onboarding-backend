@@ -1,6 +1,8 @@
 package com.api.wantedpreonboardingbackend.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -16,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,6 +40,7 @@ public class JobPost extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company")
     private Company companyId;
+
     @Column(name = "job_position")
     private String jobPosition;
 
@@ -48,6 +52,9 @@ public class JobPost extends BaseTimeEntity {
 
     @Column(name = "job_description")
     private String jobDescription;
+
+    @OneToMany(mappedBy = "applyId")
+    private List<ApplyHistory> applyHistory = new ArrayList<>();
 
     @Builder
     public JobPost(final UUID jobId, final Company company, final String jobPosition, final int jobCompensation, final String jobTech,
