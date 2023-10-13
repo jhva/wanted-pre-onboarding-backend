@@ -14,15 +14,10 @@
 - JUnit5
 - MySQL 8.0.31
 
-<details>
-  <summary style="font-size: 21px; font-weight: bold">ERD</summary>
+## ERD
+<img src="https://github.com/jhva/wanted-pre-onboarding-backend/assets/88875539/08d28ac8-2105-427a-adad-41c96bb116c6"/>
 
-<div markdown="1">
-<img src="https://github.com/jhva/wanted-pre-onboarding-backend/blob/main/docs/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202023-10-13%20%EC%98%A4%ED%9B%84%206.
-50.16.png"/>
 
-</div>
-</details>
 
 ## application-production.yaml
 
