@@ -44,7 +44,7 @@ public class Company extends BaseTimeEntity {
     @Column(name = "company_area")
     private String companyArea;
 
-    @OneToMany(mappedBy = "companyId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobPost> jobPosts = new ArrayList<>();
 
     @Builder

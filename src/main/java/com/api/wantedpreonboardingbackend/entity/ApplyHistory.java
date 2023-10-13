@@ -38,7 +38,7 @@ public class ApplyHistory extends BaseTimeEntity {
     private UUID applyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job")
+    @JoinColumn(name = "jobId")
     private JobPost jobPost;
 
     @ManyToOne(fetch = FetchType.LAZY)

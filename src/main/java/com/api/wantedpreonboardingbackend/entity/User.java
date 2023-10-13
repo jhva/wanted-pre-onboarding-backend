@@ -27,7 +27,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User extends BaseTimeEntity {
@@ -41,7 +41,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_name")
     private String userName;
 
-    @OneToMany(mappedBy = "applyId")
+    @OneToMany(mappedBy = "applyId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<ApplyHistory> applyHistory = new ArrayList<>();
 
     @Builder

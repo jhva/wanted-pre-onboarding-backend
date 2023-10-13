@@ -17,6 +17,7 @@ import com.api.wantedpreonboardingbackend.entity.Company;
 import com.api.wantedpreonboardingbackend.service.CompanyService;
 import com.api.wantedpreonboardingbackend.service.dto.CompanyDto;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping(path = "/create-company")
-    public ApiResponse<Object> createPost(@RequestBody final CompanyDto.SaveRequest saveRequestDto) {
+    public ApiResponse<Object> createPost(@RequestBody @Valid final CompanyDto.SaveRequest saveRequestDto) {
         companyService.createCompany(saveRequestDto);
         return ApiResponse.<Object>builder()
             .statusCode(HttpStatus.CREATED.value())
